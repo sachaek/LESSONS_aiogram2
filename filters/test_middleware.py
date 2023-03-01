@@ -1,0 +1,14 @@
+import logging
+
+from aiogram import types
+from aiogram.dispatcher.filters import BoundFilter
+from aiogram.dispatcher.handler import ctx_data
+
+
+class SomeF(BoundFilter):
+    async def check(self, message: types.Message):
+        data = ctx_data.get()  # контекстные данные из хендлера достанем
+        logging.info(f"4. Filter,{data=}")
+        logging.info("Следующая точка: Process Message")
+        return {'from_filter': "данные из фильтра"}
+
