@@ -21,5 +21,5 @@ async def show_items(message: types.Message):
                                        description=item.description,
                                        price=item.price,
                                    ),
-                                   reply_markup=buy_keyboard(item)
+                                   reply_markup=buy_keyboard(item.id)
                                    )
