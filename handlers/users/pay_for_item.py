@@ -1,10 +1,13 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command
+from aiogram.utils.markdown import hlink, hcode
 
+from data import config
 from data.items import items
 from keyboards.inline.purchases import buy_keyboard
 from loader import dp
+from utils.misc.qiwi import Payment
 
 
 @dp.message_handler(Command("items"))
@@ -36,4 +39,17 @@ async def create_invoice(call: types.CallbackQuery, state: FSMContext):
     item = items[item_id]
     amount = item.price
 
-    payment = Payment()
+    payment = Payment(amount=amount)
+    payment.create()
+    await call.message.answer(
+        "\n".join(
+            [
+                f"Оплатите не менее {amount:.2f} по номеру телефона или по адресу",
+                "",
+                hlink(config.WALLET_QIWI, url=payment.invoice),
+                "И обязательно укажите ID платежа:",
+                hcode(payment.id)
+            ]
+        ),
+        reply_markup=paid_keyboard()
+    )
