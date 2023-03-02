@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 
+from data.items import items
 from loader import dp
 
 
@@ -13,7 +14,7 @@ async def show_items(message: types.Message):
     
     <u>Цена:</u> {price:.2f} <b>руб.</b>
     """
-    items = []
+
     for item in items:
         await message.answer_photo(photo=item.photo_link,
                                    caption=caption.format(

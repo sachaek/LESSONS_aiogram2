@@ -43,3 +43,4 @@ Iphone_XS = Item(
     photo_link="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Iphone_XS_logo.svg/1200px-Iphone_XS_logo.svg.png"
 )
 
+items = [Tesla_S, Tesla_X, Iphone_XS]
