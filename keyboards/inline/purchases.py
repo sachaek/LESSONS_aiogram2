@@ -9,6 +9,7 @@ def buy_keyboard(item_id):
             ]
         ]
     )
+    return keyboard
 
 
 paid_keyboard = InlineKeyboardMarkup(
