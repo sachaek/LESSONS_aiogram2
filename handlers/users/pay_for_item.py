@@ -5,9 +5,9 @@ from aiogram.utils.markdown import hlink, hcode
 
 from data import config
 from data.items import items
-from keyboards.inline.purchases import buy_keyboard
+from keyboards.inline.purchases import buy_keyboard, paid_keyboard
 from loader import dp
-from utils.misc.qiwi import Payment
+from utils.misc.qiwi import Payment, NoPaymentFound, NotEnoughMoney
 
 
 @dp.message_handler(Command("items"))
@@ -51,5 +51,31 @@ async def create_invoice(call: types.CallbackQuery, state: FSMContext):
                 hcode(payment.id)
             ]
         ),
-        reply_markup=paid_keyboard()
+        reply_markup=paid_keyboard
     )
+    await state.set_state("qiwi")
+    await state.update_data(payment=payment)
+
+
+@dp.callback_query_handler(text="cancel", state="qiwi")
+async def cancel_payment(call: types.CallbackQuery, state: FSMContext):
+    await call.message.edit_text("Отменено")
+    await state.finish()
+
+
+@dp.callback_query_handler(text_contains="paid", state="qiwi")
+async def approve_payment(call: types.CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    payment: Payment = data.get("payment")
+    try:
+        payment.check_payment()
+    except NoPaymentFound:
+        await call.message.answer("Транзакция не найдена")
+        return
+    except NotEnoughMoney:
+        await call.message.answer("Оплаченная сумма меньше необходимой")
+        return
+    else:
+        await call.message.answer("Успешно оплачено")
+    await call.message.delete_reply_markup()
+    await state.finish()

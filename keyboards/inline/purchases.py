@@ -9,3 +9,15 @@ def buy_keyboard(item_id):
             ]
         ]
     )
+
+
+paid_keyboard = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Оплатил", callback_data="paid"),
+        ],
+        [
+            InlineKeyboardButton(text="Отмена", callback_data="cancel"),
+        ],
+    ]
+)
