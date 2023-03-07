@@ -1,6 +1,4 @@
 from yoomoney import Client, Quickpay
-from config import TOKEN, RECEIVER
-from decimal import Decimal
 
 
 class NotEnoughMoney(Exception):

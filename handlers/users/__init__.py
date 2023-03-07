@@ -1,3 +1,3 @@
-from . import help
-from . import start
-from . import echo
+from .pay_for_item import dp
+
+__all__ = ["dp"]
