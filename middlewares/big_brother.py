@@ -73,5 +73,9 @@ class BigBrother(BaseMiddleware):
 
 
     #3.5
-    async def on_pre_process_callback_query(self, callback: types.CallbackQuery, data: dict):  # there is other data
+    # async def on_pre_process_callback_query(self, callback: types.CallbackQuery, data: dict):  # there is other data
+    #     await callback.answer() # этот мидлварь позволит не дожидаться ответа на кнопку
+
+
+    async def on_post_process_callback_query(self, callback: types.CallbackQuery, data: dict):  # there is other data
         await callback.answer() # этот мидлварь позволит не дожидаться ответа на кнопку
