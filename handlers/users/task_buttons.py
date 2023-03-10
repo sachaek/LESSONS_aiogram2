@@ -11,8 +11,8 @@ orange_photo = "https://images.unsplash.com/photo-1557800636-894a64c1696f?ixlib=
                "=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
 
 items = [
-    {'item_id': 0, 'item_name': 'apple', 'item_photo': apple_photo},
-    {'item_id': 1, 'item_name': 'orange', 'item_photo': orange_photo}
+    {'item_id': 1, 'item_name': 'apple', 'item_photo': apple_photo},
+    {'item_id': 2, 'item_name': 'orange', 'item_photo': orange_photo}
 ]
 
 
@@ -30,7 +30,7 @@ async def create_invoice(call: types.CallbackQuery):
     item_id = call.data.split("_")[-1]
     item_id = int(item_id)
     item: dict = items[item_id]
-    await bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=f"Покупай товар номер {item_id}")
+    await bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=f"Покупай товар номер Buy_{item_id}")
     await bot.edit_message_reply_markup(chat_id=call.message.chat.id, message_id=call.message, reply_markup=None)
 
 

@@ -6,5 +6,5 @@ from .big_brother import BigBrother
 
 if __name__ == "middlewares":
     dp.middleware.setup(ThrottlingMiddleware())
-    dp.middleware.setup(BigBrother())
+    # dp.middleware.setup(BigBrother())
 
