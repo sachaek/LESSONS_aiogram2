@@ -53,7 +53,7 @@ class Database:
         id SERIAL PRIMARY KEY,
         full_name VARCHAR(255) NOT NULL,
         username VARCHAR(255) NULL,
-        telegram_id BIGINT NOT NULL,            
+        telegram_id BIGINT NOT NULL            
         );
         """
         await self.execute(sql, execute=True)
