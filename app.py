@@ -13,6 +13,7 @@ async def on_startup(dispatcher):
     # Устанавливаем дефолтные команды
     logging.info("Подключение к базе данных")
     await db.create()
+    await db.test_connection()
     logging.info("Создаем таблицу пользователей")
     await db.create_table()
     logging.info("Готово")

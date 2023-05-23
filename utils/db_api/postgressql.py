@@ -8,6 +8,17 @@ from data import config
 
 
 class Database:
+    """
+    Testing from python console:
+    from utils.db_api.postgressql import Database
+    db = Database()
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(db.create())
+    loop.run_until_complete(db.test_connection())
+    loop.run_until_complete(db.create_table())
+    """
+
     def __init__(self):
         self.pool: Union[Pool, None] = None
 
@@ -53,7 +64,7 @@ class Database:
         id SERIAL PRIMARY KEY,
         full_name VARCHAR(255) NOT NULL,
         username VARCHAR(255) NULL,
-        telegram_id BIGINT NOT NULL            
+        telegram_id BIGINT NOT NULL
         );
         """
         await self.execute(sql, execute=True)
@@ -73,6 +84,11 @@ class Database:
         sql = "SELECT * FROM Users WHERE "
         sql, parameters = self.format_args(sql, parameters=kwargs)
         return await self.execute(sql, *parameters, fetchrow=True)
+
+    async def test_connection(self):
+        sql = "SELECT version()"
+        result = await self.execute(sql, fetchval=True)
+        print(result)
 
     async def count_users(self):
         sql = "SELECT COUNT(*) FROM Users"
