@@ -17,7 +17,26 @@ class Database:
     loop.run_until_complete(db.create())
     loop.run_until_complete(db.test_connection())
     loop.run_until_complete(db.create_table())
+
+    async def add_users():
+        users = [
+            ("Женя", "zhenya", 123),
+            ("Сеня", "senya", 124),
+            ("Феня", "phenya", 125)
+        ]
+        list_of_db_users = []
+        for full_name, username, telegram_id in users:
+            user = await db.add_user(full_name, username, telegram_id)
+            list_of_db_users.append(user)
+        print(list_of_db_users)
+
+    loop.run_until_complete(add_users())
+
+    [<Record id=1 full_name='Женя' username='zhenya' telegram_id=123>,
+    <Record id=2 full_name='Сеня' username='senya' telegram_id=124>,
+    <Record id=3 full_name='Феня'
     """
+
 
     def __init__(self):
         self.pool: Union[Pool, None] = None
@@ -64,11 +83,15 @@ class Database:
         id SERIAL PRIMARY KEY,
         full_name VARCHAR(255) NOT NULL,
         username VARCHAR(255) NULL,
-        telegram_id BIGINT NOT NULL
+        telegram_id BIGINT NOT NULL UNIQUE
         );
         """
         await self.execute(sql, execute=True)
 
+    async def add_user(self, full_name, username, telegram_id):
+        sql = "INSERT INTO Users (full_name, username, telegram_id) VALUES($1, $2, $3) returning *"
+        return await self.execute(sql, full_name, username, telegram_id, fetchrow=True)
+    
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
         return await self.execute(sql, fetch=True)
