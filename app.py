@@ -4,6 +4,7 @@ from aiogram import executor
 
 from loader import dp
 import middlewares, filters, handlers
+from utils.db_api import db_gino
 from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
 from loader import db
@@ -12,15 +13,15 @@ from loader import db
 async def on_startup(dispatcher):
     # Устанавливаем дефолтные команды
     logging.info("Подключение к базе данных")
-    await db.create()
-    await db.test_connection()
-    await db.drop_users() # для тестового режима
-    logging.info("Создаем таблицу пользователей")
-    await db.create_table()
+    await db_gino.on_startup(dp)
     logging.info("Готово")
-    await set_default_commands(dispatcher)
 
+    logging.info("Чистим базуданных")
+    await db.gino.drop_all() # можно не чистить
 
+    logging.info("Создаем таблицу пользователей")
+    await db.gino.create_all()
+    logging.info("Готово")
 
     # Уведомляет про запуск
     await on_startup_notify(dispatcher)
